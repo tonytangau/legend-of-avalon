@@ -14,6 +14,14 @@ var allUserReady = function (users) {
     return _.every(users, (user) => user.isReady) && users.length > 1;
 }
 
+var assignRoles = function (participants) {
+    switch (participants.length) {
+        case 2:
+            // TODO: Load game setup and chracters, and randomly assign
+            break;
+    }
+}
+
 var setupServer = function (io) {
     io.activeUsers = [];
 
@@ -47,8 +55,7 @@ var setupServer = function (io) {
 
                 // Check if all users ready, start game
                 if (allUserReady(io.activeUsers)) {
-                    io.emit('status', `All users are ready! Game starting...`);
-                    io.emit('startGame');
+                    io.emit('starting', `All users are ready! Game starting...`);
                 }
             }
         });

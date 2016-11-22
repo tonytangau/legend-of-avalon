@@ -8,6 +8,7 @@ import 'materialize-css/dist/js/materialize.js';
 import App from './App';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat';
+import Game from './components/Game';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
@@ -37,6 +38,11 @@ const router = new VueRouter({
       path: '/chat',
       name: 'chat',
       component: Chat
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: Game
     }
   ]
 });

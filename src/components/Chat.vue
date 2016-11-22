@@ -24,7 +24,7 @@
         </div>
 
         <div class="row">
-            <div class="input-field col s11">
+            <div class="input-field col s10">
                 <input id="msg" v-model="newMessage" v-on:keyup.enter="sendMessage" type="text" autocomplete="off" />
                 <label for="msg">Message</label>
             </div>
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-
 var scrollToBottom = function () {
     $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")});    
 }
@@ -86,6 +85,15 @@ export default {
 
             scrollToBottom();
         });
+
+        this.$store.state.socket.on('starting', function (msg) {
+            vm.groupMessages.push({
+                text: msg,
+                classNames: "blue lighten-5"
+            });
+
+            vm.$router.push('game');
+        });
     }
   }
 }
@@ -93,12 +101,11 @@ export default {
 
 <style>
 #messages {
-    max-height: 70vh;
+    max-height: 50vh;
     overflow-y: auto;
 }
 
 .messages-section {
-    height: 80vh;
     margin-top: 30px;
 }
 
