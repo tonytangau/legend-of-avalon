@@ -1,4 +1,6 @@
-var _ = require('lodash');
+const _ = require('lodash');
+const gameSetup = require('../game/setup');
+const characters = require('../game/characters');
 
 var findUser = function (users, socketId) {
     return users.find((user) => user.id === socketId);
@@ -11,23 +13,44 @@ var findUsername = function (users, socketId) {
 }
 
 var allUserReady = function (users) {
-    return _.every(users, (user) => user.isReady) && users.length > 1;
+    return _.every(users, (user) => user.isReady) && users.length > 0 && users.length < 11;
 }
 
-var assignRoles = function (participants) {
-    switch (participants.length) {
-        case 2:
-            // TODO: Load game setup and chracters, and randomly assign
-            break;
-    }
+var setupGame = function (io) {
+    let game = _.find(gameSetup, s => s.players === io.participants.length);
+    if(!game) return;
+
+    let gameCharacters = _.map(game.characters, function(charId) {
+        var temp = _.find(characters, c => c.id === charId);
+
+        return {
+            id: charId,
+            name: temp.name.zh,
+            image: temp.image,
+            isEvil: temp.isEvil
+        }
+    });
+
+    var randomeCharacters = _.shuffle(gameCharacters);
+
+    //console.log(JSON.stringify(randomeCharacters));
+
+    // Assign characters to participants
+    _.each(io.participants, function (p, index) {
+        p.character = randomeCharacters[index];  
+
+        io.sockets.sockets[p.id].emit('assign', p.character);
+    });
+
+    io.game = game;
 }
 
 var setupServer = function (io) {
-    io.activeUsers = [];
+    io.participants = [];
 
     io.on('connection', function (socket) {
         socket.on('chat', function (msg) {
-            let name = findUsername(io.activeUsers, socket.id);
+            let name = findUsername(io.participants, socket.id);
 
             io.emit('chat', {
                 text: msg.text,
@@ -36,17 +59,16 @@ var setupServer = function (io) {
         });
 
         socket.on('changeName', function (name) {
-            io.activeUsers.push({
+            io.participants.push({
                 id: socket.id,
                 name: name
             });
-            //console.log(JSON.stringify(io.activeUsers))
 
             socket.broadcast.emit('status', `New user "${name}" connected`);
         });
 
         socket.on('isReady', function () {
-            let user = findUser(io.activeUsers, socket.id);
+            let user = findUser(io.participants, socket.id);
 
             if (user) {
                 user.isReady = true;
@@ -54,14 +76,17 @@ var setupServer = function (io) {
                 socket.broadcast.emit('status', `User "${user.name}" is ready!`);
 
                 // Check if all users ready, start game
-                if (allUserReady(io.activeUsers)) {
+                if (allUserReady(io.participants)) {
                     io.emit('starting', `All users are ready! Game starting...`);
+
+                    // Load game setup and chracters, and randomly assign roles
+                    setupGame(io);
                 }
             }
         });
 
         socket.on('disconnect', function () {
-            let name = findUsername(io.activeUsers, socket.id);
+            let name = findUsername(io.participants, socket.id);
 
             socket.broadcast.emit("status", `User ${name} disconnected`);
         });

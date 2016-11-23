@@ -101,7 +101,7 @@ export default {
 
 <style>
 #messages {
-    max-height: 50vh;
+    height: 50vh;
     overflow-y: auto;
 }
 
