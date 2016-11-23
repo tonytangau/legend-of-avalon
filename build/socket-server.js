@@ -25,7 +25,7 @@ var setupGame = function (io) {
 
         return {
             id: charId,
-            name: temp.name.zh,
+            name: temp.name.en,
             image: temp.image,
             isEvil: temp.isEvil
         }

@@ -7,8 +7,8 @@
                         <img :src="'static/' + role.image">
                     </div>
                     <div class="card-stacked">
-                        <div class="card-content">
-                            <h1>{{role.name}}</h1>
+                        <div class="card-content valign-wrapper">
+                            <h3 class="valign">{{role.name}}</h3>
                             <div v-if=!role.name class="progress">
                                 <div class="indeterminate"></div>
                             </div>
@@ -43,39 +43,25 @@ export default {
         this.$store.state.socket.on('assign', function (character) {
             vm.role = character;
         });
-
-        // this.$store.state.socket.on('chat', function (msg) {
-        //     vm.groupMessages.push({
-        //         text: msg.text,
-        //         user: msg.user
-        //     });
-
-        //     scrollToBottom();
-        // });
-
-        // this.$store.state.socket.on('status', function (msg) {
-        //     vm.groupMessages.push({
-        //         text: msg,
-        //         classNames: "blue lighten-5"
-        //     });
-
-        //     scrollToBottom();
-        // });
     }
   }
 }
 </script>
 
 <style>
-    .role-detail {
-        margin-top: 20vh;
-    }
+.role-detail {
+    margin-top: 20vh;
+}
 
-    .card-content {
-        text-align: center;
-    }
+.card-content {
+    text-align: center;
+}
 
-    .start-btn {
-        width: 100%;
-    }
+.card-content h3 {
+    font-family: 'Poiret One', cursive;
+}
+
+.start-btn {
+    width: 100%;
+}
 </style>

@@ -1,21 +1,19 @@
 <template>
     <div class="container">
-        <div class="row messages-section">
-            <div class="row">
-                <h4 class="col s6 orange-text text-darken-3">Legend of Avalon {{ready ? "[READY]" : ""}}</h4>
-                <div class="col s6">
-                    <div class="switch right ready-switch">
-                        <label>
-                        Wait..
-                        <input type="checkbox" v-model="ready" v-on:change="setReady" :disabled="ready">
-                        <span class="lever"></span>
-                        Ready
-                        </label>
-                    </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="switch ready-switch">
+                    <label>
+                    Wait..
+                    <input type="checkbox" v-model="ready" v-on:change="setReady" :disabled="ready">
+                    <span class="lever"></span>
+                    I'm Ready!
+                    </label>
                 </div>
             </div>
-
-            <ul id="messages" class="collection">
+        </div>
+        <div class="row">
+            <ul id="messages" class="collection col s12">
                 <li v-bind:class="['collection-item', message.classNames]" v-for="message in groupMessages" v-cloak>
                     <span class="orange-text text-darken-4" v-if=message.user>{{ message.user }}:</span>
                     <span class="text-item">{{ message.text }}</span>
@@ -101,12 +99,8 @@ export default {
 
 <style>
 #messages {
-    height: 50vh;
+    height: 40vh;
     overflow-y: auto;
-}
-
-.messages-section {
-    margin-top: 30px;
 }
 
 .message-add {
@@ -121,5 +115,6 @@ export default {
 .ready-switch {
     margin-top: 30px;
     margin-right: 10px;
+    text-align: center;
 }
 </style>
