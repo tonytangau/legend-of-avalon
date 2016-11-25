@@ -9,6 +9,7 @@
                     <div class="card-stacked">
                         <div class="card-content valign-wrapper">
                             <h3 class="valign">{{role.name}}</h3>
+                            <h5 v-if=isLeader><img src="static/leader.png"></h5>
                             <div v-if=!role.name class="progress">
                                 <div class="indeterminate"></div>
                             </div>
@@ -27,7 +28,7 @@
 
 <script>
 export default {
-  name: 'game',
+  name: 'pre-game',
   data () {
     return {
         role: {}
@@ -42,6 +43,11 @@ export default {
 
         this.$store.state.socket.on('assign', function (character) {
             vm.role = character;
+        });
+        
+        this.$store.state.socket.on('assignLeader', function (character) {
+            vm.role = character;
+            vm.isLeader = true;
         });
     }
   }

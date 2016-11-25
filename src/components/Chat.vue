@@ -90,7 +90,7 @@ export default {
                 classNames: "blue lighten-5"
             });
 
-            vm.$router.push('game');
+            vm.$router.push('pre-game');
         });
     }
   }

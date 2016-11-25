@@ -2,25 +2,25 @@ const _ = require('lodash');
 const gameSetup = require('../game/setup');
 const characters = require('../game/characters');
 
-var findUser = function (users, socketId) {
+const findUser = function (users, socketId) {
     return users.find((user) => user.id === socketId);
 }
 
-var findUsername = function (users, socketId) {
+const findUsername = function (users, socketId) {
     let user = findUser(users, socketId);
 
     return user ? user.name : '';
 }
 
-var allUserReady = function (users) {
+const allUserReady = function (users) {
     return _.every(users, (user) => user.isReady) && users.length > 0 && users.length < 11;
 }
 
-var setupGame = function (io) {
-    let game = _.find(gameSetup, s => s.players === io.participants.length);
+const setupGame = function (io) {
+    const game = _.find(gameSetup, s => s.players === io.participants.length);
     if(!game) return;
 
-    let gameCharacters = _.map(game.characters, function(charId) {
+    const gameCharacters = _.map(game.characters, function(charId) {
         var temp = _.find(characters, c => c.id === charId);
 
         return {
@@ -31,21 +31,32 @@ var setupGame = function (io) {
         }
     });
 
-    var randomeCharacters = _.shuffle(gameCharacters);
-
-    //console.log(JSON.stringify(randomeCharacters));
+    const randomeCharacters = _.shuffle(gameCharacters);
+    const leaderPos = Math.floor(Math.random() * io.participants.length);
+    game.seats = [];
 
     // Assign characters to participants
     _.each(io.participants, function (p, index) {
-        p.character = randomeCharacters[index];  
+        let role = randomeCharacters[index]; ;
+        p.character = role;
 
-        io.sockets.sockets[p.id].emit('assign', p.character);
+        game.seats.push({
+            id: p.id,
+            role: role.id
+        });
+
+        if (index === leaderPos) {
+            game.leader = p.id;
+            io.sockets.sockets[p.id].emit('assignLeader', p.character);
+        } else {
+            io.sockets.sockets[p.id].emit('assign', p.character);
+        }
     });
 
     io.game = game;
 }
 
-var setupServer = function (io) {
+const setupServer = function (io) {
     io.participants = [];
 
     io.on('connection', function (socket) {
@@ -59,12 +70,18 @@ var setupServer = function (io) {
         });
 
         socket.on('changeName', function (name) {
-            io.participants.push({
-                id: socket.id,
-                name: name
-            });
+            let exisiting = findUsername(io.participants, socket.id);
 
-            socket.broadcast.emit('status', `New user "${name}" connected`);
+            if (exisiting) {
+                socket.emit('duplicateName');
+            } else {
+                io.participants.push({
+                    id: socket.id,
+                    name: name
+                });
+
+                socket.broadcast.emit('status', `New user "${name}" connected`);
+            }
         });
 
         socket.on('isReady', function () {
