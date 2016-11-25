@@ -5,7 +5,7 @@ module.exports = [
             en: 'Merlin',
             zh: '梅林'
         },
-        image: 'assassin.jpg'
+        image: 'merlin.png'
     },
     {
         id: 1,
@@ -13,7 +13,7 @@ module.exports = [
             en: 'Percival',
             zh: '派西维尔'
         },
-        image: 'assassin.jpg'
+        image: 'percival.png'
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ module.exports = [
             en: 'Loyal Servants of Arthur',
             zh: '亚瑟的忠臣'
         },
-        image: 'assassin.jpg'
+        image: 'loyal1.png'
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ module.exports = [
             en: 'Morgana',
             zh: '莫甘娜'
         },
-        image: 'assassin.jpg',
+        image: 'morgana.png',
         isEvil: true
     },
     {
@@ -38,7 +38,7 @@ module.exports = [
             en: 'Mordred',
             zh: '莫德雷德'
         },
-        image: 'assassin.jpg',
+        image: 'mordred.png',
         isEvil: true
     },
     {
@@ -47,7 +47,7 @@ module.exports = [
             en: 'Oberon',
             zh: '奥伯伦'
         },
-        image: 'assassin.jpg',
+        image: 'oberon.png',
         isEvil: true
     },
     {
@@ -56,7 +56,7 @@ module.exports = [
             en: 'Assassin',
             zh: '刺客'
         },
-        image: 'assassin.jpg',
+        image: 'assassin.png',
         isEvil: true
     },
     {
@@ -65,7 +65,7 @@ module.exports = [
             en: 'Minions of Mordred',
             zh: '莫德雷德的爪牙'
         },
-        image: 'assassin.jpg',
+        image: 'minions.png',
         isEvil: true
     }
 ];
